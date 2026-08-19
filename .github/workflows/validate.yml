@@ -1,0 +1,40 @@
+name: Validate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        terraform_version:
+          - "1.5.7"
+          - "1.15.8"
+        provider_version:
+          - "0.0.60"
+          - "latest"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ matrix.terraform_version }}
+
+      - name: Validate module and examples
+        env:
+          SUBNET_PROVIDER_VERSION: ${{ matrix.provider_version }}
+        run: ./scripts/validate.sh
+
+      - name: Validate real-cloud fixture statically
+        if: matrix.provider_version == '0.0.60'
+        run: ./tests/validate.sh
