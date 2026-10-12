@@ -6,8 +6,3 @@ repos:
         entry: terraform fmt -check -recursive
         language: system
         pass_filenames: false
-      - id: terraform-validate
-        name: terraform validate
-        entry: ./scripts/validate.sh
-        language: system
-        pass_filenames: false

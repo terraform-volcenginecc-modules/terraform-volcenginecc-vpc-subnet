@@ -1,8 +1,8 @@
 # Complete example
 
-Creates public, private, database, and intra classifications across two availability zones. It assigns logical `route_table_key` values so `subnet_ids_by_route_table_key` can be passed to a separately owned Route Table Module.
+Creates public, private, database, and intra classifications across two availability zones. It assigns logical `route_table_key` values so `subnet_ids_by_route_table_key` can be passed to a separately owned route table module.
 
-The classifications and route-table keys organize downstream composition only. This example intentionally does not create route tables, route entries, NAT Gateways, or Internet Gateways, so a `public` classification alone does not provide internet connectivity.
+The classifications and route-table keys organize downstream composition only. This example intentionally does not create route tables, route entries, NAT gateways, or internet gateways, so a `public` classification alone does not provide internet connectivity.
 
 ```bash
 terraform init

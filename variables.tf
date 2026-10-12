@@ -15,12 +15,12 @@ variable "name_prefix" {
   default     = null
 
   validation {
-    condition     = var.name_prefix == null || (trimspace(var.name_prefix) != "" && length(var.name_prefix) <= 128)
+    condition     = var.name_prefix == null ? true : (trimspace(var.name_prefix) != "" && length(var.name_prefix) <= 128)
     error_message = "name_prefix must be null or a non-empty string no longer than 128 characters."
   }
 
   validation {
-    condition     = var.name_prefix == null || can(regex("^[\\p{L}\\p{N}][\\p{L}\\p{N}._-]*$", var.name_prefix))
+    condition     = var.name_prefix == null ? true : can(regex("^[\\p{L}\\p{N}][\\p{L}\\p{N}._-]*$", var.name_prefix))
     error_message = "name_prefix must start with a letter or number and contain only letters, numbers, periods, underscores, and hyphens."
   }
 }
@@ -73,7 +73,7 @@ variable "subnets" {
 
   validation {
     condition = alltrue([
-      for subnet in values(var.subnets) : subnet.route_table_key == null || (
+      for subnet in values(var.subnets) : subnet.route_table_key == null ? true : (
         trimspace(subnet.route_table_key) != "" &&
         can(regex("^[A-Za-z0-9][A-Za-z0-9._-]*$", subnet.route_table_key))
       )
@@ -112,7 +112,7 @@ variable "subnets" {
 
   validation {
     condition = alltrue([
-      for subnet in values(var.subnets) : subnet.name == null || (
+      for subnet in values(var.subnets) : subnet.name == null ? true : (
         length(subnet.name) >= 1 &&
         length(subnet.name) <= 128 &&
         can(regex("^[\\p{L}\\p{N}][\\p{L}\\p{N}._-]*$", subnet.name))
@@ -123,7 +123,7 @@ variable "subnets" {
 
   validation {
     condition = alltrue([
-      for subnet in values(var.subnets) : subnet.description == null || (
+      for subnet in values(var.subnets) : subnet.description == null ? true : (
         length(subnet.description) <= 255 &&
         (
           subnet.description == "" ||

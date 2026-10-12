@@ -87,7 +87,7 @@ output "subnets" {
       network_acl_id             = subnet.network_acl_id
       project_name               = subnet.project_name
       tags = subnet.tags == null ? tomap({}) : tomap({
-        for tag in subnet.tags : tag.key => coalesce(tag.value, "")
+        for tag in subnet.tags : tag.key => tag.value == null ? "" : tag.value
       })
     }
   }
