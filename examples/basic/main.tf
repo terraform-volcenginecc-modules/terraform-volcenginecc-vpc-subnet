@@ -3,7 +3,7 @@ provider "volcenginecc" {
 }
 
 module "subnets" {
-  source  = "volcengine/vpc-subnet/volcenginecc"
+  source  = "terraform-volcenginecc-modules/vpc-subnet/volcenginecc"
   version = "~> 1.0"
 
   vpc_id      = var.vpc_id

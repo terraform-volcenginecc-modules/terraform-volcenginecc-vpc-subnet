@@ -18,7 +18,7 @@
 
 ```hcl
 module "subnets" {
-  source  = "volcengine/vpc-subnet/volcenginecc"
+  source  = "terraform-volcenginecc-modules/vpc-subnet/volcenginecc"
   version = "~> 1.0"
 
   vpc_id      = module.vpc.vpc_id
@@ -60,7 +60,7 @@ provider "volcenginecc" {
 
 ```hcl
 module "vpc" {
-  source  = "volcengine/vpc/volcenginecc"
+  source  = "terraform-volcenginecc-modules/vpc/volcenginecc"
   version = "~> 1.0"
 
   name       = "application"
@@ -68,7 +68,7 @@ module "vpc" {
 }
 
 module "subnets" {
-  source  = "volcengine/vpc-subnet/volcenginecc"
+  source  = "terraform-volcenginecc-modules/vpc-subnet/volcenginecc"
   version = "~> 1.0"
 
   vpc_id = module.vpc.vpc_id
