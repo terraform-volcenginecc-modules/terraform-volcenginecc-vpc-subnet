@@ -2,7 +2,7 @@
 
 在已有 VPC 中创建多个子网的 Terraform 模块，采用稳定的逻辑键并显式指定业务分类。
 
-## 概述
+## 1. 概述
 
 本模块仅管理子网。它不会创建 VPC、路由表、路由条目、互联网网关、NAT 网关、网络 ACL、安全组，也不会建立路由表关联。
 
@@ -14,7 +14,9 @@
 
 修改子网映射的键会改变其 Terraform 资源地址，通常会销毁并重建该子网。请保持键稳定；仅当需要变更显示名称时，再修改 `name`。
 
-## 用法
+## 2. 用法
+
+### 2.1 基础用法
 
 ```hcl
 module "subnets" {
@@ -56,7 +58,7 @@ provider "volcenginecc" {
 
 请使用环境变量、凭据 profile（配置文件）或其他受支持的凭据来源。请勿在模块配置中放置访问密钥。
 
-## 与 VPC 模块组合
+### 2.2 与 VPC 模块组合
 
 ```hcl
 module "vpc" {
@@ -83,7 +85,7 @@ module "subnets" {
 }
 ```
 
-## 与路由表模块组合
+### 2.3 与路由表模块组合
 
 `route_table_key` 是逻辑组合键，而非云端的路由表 ID。以下模式使路由表模块成为子网关联的唯一负责方：
 
@@ -105,31 +107,31 @@ module "route_tables" {
 
 当所需的下一跳资源就绪后，再向对应的路由表条目添加路由。公网分组需要已绑定并启用的互联网网关以及一条默认路由；私网出向分组需要 NAT 网关以及一条默认路由。
 
-## 示例
+## 3. 示例
 
 - basic：在已有 VPC 中创建一个 private 分类的子网。
 - complete：跨多个可用区创建 public、private、database 与 intra 分类。
 
-## 版本要求
+## 4. 版本要求
 
 | 名称 | 版本 |
 |---|---|
 | Terraform | `>= 1.5.0` |
 | `volcengine/volcenginecc` | `>= 0.0.60` |
 
-## Provider
+## 5. Provider
 
 | 名称 | 来源 |
 |---|---|
 | `volcenginecc` | `volcengine/volcenginecc` |
 
-## 资源
+## 6. 资源
 
 | 类型 | 名称 |
 |---|---|
 | Resource | `volcenginecc_vpc_subnet.this` |
 
-## 输入
+## 7. 输入
 
 | 名称 | 类型 | 默认值 | 是否必填 | 描述 |
 |---|---|---:|---:|---|
@@ -150,7 +152,7 @@ module "route_tables" {
 | `description` | `string` | `null` | 子网描述。 |
 | `tags` | `map(string)` | `{}` | 单个子网的标签，会覆盖 `common_tags`。 |
 
-## 输出
+## 8. 输出
 
 | 名称 | 描述 |
 |---|---|
@@ -164,7 +166,7 @@ module "route_tables" {
 | `intra_subnet_ids` | 分类为 intra 的 ID。 |
 | `subnets` | 供下游模块使用的稳定详情，包括只读的路由表信息。 |
 
-## 注意事项
+## 9. 注意事项
 
 - VPC 必须已存在。与 `terraform-volcenginecc-vpc` 组合时传入 `module.vpc.vpc_id`。
 - `route_table_key` 与 `subnet_type` 仅表达组合意图。实际关联由 `terraform-volcenginecc-vpc-route-table` 负责；请勿从其他 State 管理同一关联。
