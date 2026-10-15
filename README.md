@@ -2,7 +2,7 @@
 
 Terraform module for creating multiple Volcengine subnets in an existing VPC with stable logical keys and explicit business classifications.
 
-## Overview
+## 1. Overview
 
 This module manages subnets only. It does not create a VPC, route table, route entry, internet gateway, NAT gateway, network ACL, security group, or route-table association.
 
@@ -14,7 +14,9 @@ Each subnet is keyed by a stable logical name and may be classified as `public`,
 
 Changing a subnet map key changes its Terraform resource address and normally destroys and recreates that subnet. Keep keys stable and change `name` when only the display name should change.
 
-## Usage
+## 2. Usage
+
+### 2.1 Basic Usage
 
 ```hcl
 module "subnets" {
@@ -56,7 +58,7 @@ provider "volcenginecc" {
 
 Use environment variables, a profile, or another supported credential source. Do not put access keys in module configuration.
 
-## Composition with the VPC Module
+### 2.2 Composition with the VPC Module
 
 ```hcl
 module "vpc" {
@@ -83,7 +85,7 @@ module "subnets" {
 }
 ```
 
-## Composition with the Route Table Module
+### 2.3 Composition with the Route Table Module
 
 `route_table_key` is a logical composition key, not a cloud route table ID. The following pattern makes the route table module the sole owner of subnet associations:
 
@@ -105,31 +107,31 @@ module "route_tables" {
 
 Add route entries to the corresponding route-table items when the required next-hop resources exist. A public group requires an attached and enabled internet gateway plus a default route; a private egress group requires a NAT gateway plus a default route.
 
-## Examples
+## 3. Examples
 
 - basic: creates one private-classified subnet in an existing VPC.
 - complete: creates public, private, database, and intra classifications across multiple availability zones.
 
-## Requirements
+## 4. Requirements
 
 | Name | Version |
 |---|---|
 | Terraform | `>= 1.5.0` |
 | `volcengine/volcenginecc` | `>= 0.0.60` |
 
-## Providers
+## 5. Providers
 
 | Name | Source |
 |---|---|
 | `volcenginecc` | `volcengine/volcenginecc` |
 
-## Resources
+## 6. Resources
 
 | Type | Name |
 |---|---|
 | Resource | `volcenginecc_vpc_subnet.this` |
 
-## Inputs
+## 7. Inputs
 
 | Name | Type | Default | Required | Description |
 |---|---|---:|---:|---|
@@ -150,7 +152,7 @@ Each `subnets` value supports:
 | `description` | `string` | `null` | Subnet description. |
 | `tags` | `map(string)` | `{}` | Per-subnet tags that override `common_tags`. |
 
-## Outputs
+## 8. Outputs
 
 | Name | Description |
 |---|---|
@@ -164,7 +166,7 @@ Each `subnets` value supports:
 | `intra_subnet_ids` | IDs classified as intra. |
 | `subnets` | Stable details for downstream modules, including read-only route-table information. |
 
-## Notes
+## 9. Notes
 
 - The VPC must already exist. Pass `module.vpc.vpc_id` when composing with `terraform-volcenginecc-vpc`.
 - `route_table_key` and `subnet_type` express composition intent only. Actual association is owned by `terraform-volcenginecc-vpc-route-table`; do not manage the same association from another state.

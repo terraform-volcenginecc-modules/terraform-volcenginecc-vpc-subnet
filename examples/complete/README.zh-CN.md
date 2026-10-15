@@ -1,10 +1,59 @@
-# 完整示例
+# COMPLETE VPC SUBNET 示例
 
-跨两个可用区创建 public、private、database 与 intra 分类。它会分配逻辑 `route_table_key` 取值，以便将 `subnet_ids_by_route_table_key` 传递给由独立负责方管理的路由表模块。
+## 概述
 
-这些分类与路由表键仅用于组织下游组合。本示例刻意不创建路由表、路由条目、NAT 网关或互联网网关，因此仅凭 `public` 分类并不提供互联网连通性。
+VPC SUBNET 模块的可运行 complete 配置。它从输入变量设置 Provider，并调用已发布的 Registry 模块。
 
-```bash
+## 用法
+
+```shell
 terraform init
-terraform plan -var="vpc_id=vpc-xxxxxxxx"
+terraform plan
+terraform apply
+terraform plan
+terraform destroy
 ```
+
+## 依赖要求
+
+| 名称 | 版本 |
+|---|---|
+| Terraform | `>= 1.5.7` |
+| OpenTofu | `>= 1.11.8` |
+
+## Providers
+
+| 名称 | 来源 |
+|---|---|
+| `volcenginecc` | `volcengine/volcenginecc` |
+
+## 资源
+
+| 名称 | 说明 |
+|---|---|
+| `terraform-volcenginecc-modules/vpc-subnet/volcenginecc` | 已发布的 VPC SUBNET 模块。 |
+
+## 输入
+
+| 名称 | 说明 |
+|---|---|
+| `region` | 模块定义的 region。 |
+| `vpc_id` | 模块定义的 vpc_id。 |
+| `zone_ids` | 模块定义的 zone_ids。 |
+
+## 输出
+
+| 名称 | 说明 |
+|---|---|
+| `subnet_ids` | 模块定义的 subnet_ids。 |
+| `subnet_ids_by_type` | 模块定义的 subnet_ids_by_type。 |
+| `subnet_ids_by_route_table_key` | 模块定义的 subnet_ids_by_route_table_key。 |
+
+## 示例
+
+本目录即为 complete 示例。
+
+## 说明
+
+- 请通过 Provider 支持的配置提供凭据，绝不应写入源文件。
+- apply 后的最终 plan 必须报告无变更，才能接受该配置。
